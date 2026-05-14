@@ -1,0 +1,12 @@
+# Base de données
+*.db
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.env
+
+# IDE
+.vscode/
+.idea/
