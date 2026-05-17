@@ -10,6 +10,32 @@ Backend **FastAPI** · Frontend **React + TypeScript (Vite)** · Base de donnée
 L'objectif : chaque tâche accomplie est une **quête** qui fait progresser ton personnage.  
 Choisis une **Voie d'effort**, accumule de l'expérience, monte de niveau et améliore tes attributs.
 
+![Dashboard principal](screenshots/03-dashboard.png)
+
+---
+
+## Captures d'écran
+
+### Connexion
+Page d'accueil — accès au Livre des Quêtes.
+
+![Écran de connexion](screenshots/01-connexion.png)
+
+### Inscription
+Création de compte avec checklist de validation du mot de passe en temps réel.
+
+![Écran d'inscription](screenshots/02-inscription.png)
+
+### Nouvelle quête
+Formulaire de création — titre, description, voie d'effort et limite de temps optionnelle.
+
+![Création d'une quête](screenshots/04-nouvelle-quete.png)
+
+### Quêtes accomplies
+Onglet dédié, regroupé par voie avec compteurs.
+
+![Quêtes accomplies](screenshots/05-accomplies.png)
+
 ---
 
 ## Fonctionnalités
@@ -130,6 +156,12 @@ fastapi_apprentissage/
 │   ├── competences.py       # /competences
 │   ├── categories.py        # /categories
 │   └── ia.py                # /deviner-categorie
+├── screenshots/             # Captures d'écran de l'application
+│   ├── 01-connexion.png
+│   ├── 02-inscription.png
+│   ├── 03-dashboard.png
+│   ├── 04-nouvelle-quete.png
+│   └── 05-accomplies.png
 └── frontend/
     ├── src/
     │   ├── App.tsx                  # Auth, session, timeout inactivité
