@@ -11,7 +11,8 @@ class TacheModel(Base):
     titre = Column(String, nullable=False)
     description = Column(String, nullable=True)
     terminee = Column(Boolean, nullable=False, default=False)
-    categorie = Column(String, nullable=True)  # physique | mental | psychologique | None
+    categorie = Column(String, nullable=True)
+    date_limite = Column(String, nullable=True)  # ISO 8601 datetime string
     profondeur = Column(Integer, nullable=False, default=0)
     parent_id = Column(Integer, ForeignKey("taches.id"), nullable=True)
     user_id = Column(Integer, ForeignKey("utilisateurs.id"), nullable=False)

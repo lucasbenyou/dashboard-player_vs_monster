@@ -16,6 +16,7 @@ class TacheCreate(BaseModel):
     titre: str = Field(min_length=1)
     description: str | None = None
     categorie: TYPES_EFFORT | None = None
+    date_limite: str | None = None  # ISO 8601 datetime string
     parent_id: int | None = None
 
 
@@ -27,12 +28,13 @@ def _est_complete(tache: TacheModel) -> bool:
 
 def _vers_dict(tache: TacheModel) -> dict:
     base = {
-        "id":        tache.id,
-        "titre":     tache.titre,
+        "id":          tache.id,
+        "titre":       tache.titre,
         "description": tache.description,
-        "categorie": tache.categorie,
-        "profondeur": tache.profondeur,
-        "parent_id": tache.parent_id,
+        "categorie":   tache.categorie,
+        "date_limite": tache.date_limite,
+        "profondeur":  tache.profondeur,
+        "parent_id":   tache.parent_id,
         "sous_taches": [_vers_dict(st) for st in tache.sous_taches],
     }
     if tache.sous_taches:
@@ -70,6 +72,7 @@ class TacheService:
             titre=tache.titre,
             description=tache.description,
             categorie=tache.categorie,
+            date_limite=tache.date_limite,
             profondeur=profondeur,
             parent_id=tache.parent_id,
             user_id=user_id,
