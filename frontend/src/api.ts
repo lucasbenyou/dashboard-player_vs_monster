@@ -106,13 +106,3 @@ export async function terminerTache(id: number): Promise<void> {
 export async function supprimerTache(id: number): Promise<void> {
   await fetch(`${API}/taches/${id}`, { method: "DELETE", headers: authHeaders() });
 }
-
-export async function devinerCategorie(titre: string, description: string | null): Promise<string | null> {
-  const res = await fetch(`${API}/deviner-categorie`, {
-    method: "POST",
-    headers: authHeaders(),
-    body: JSON.stringify({ titre, description }),
-  });
-  const data = await json<{ categorie: string | null }>(res);
-  return data.categorie;
-}

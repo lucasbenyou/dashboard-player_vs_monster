@@ -9,7 +9,7 @@ from services import categories as cat_service
 
 MAX_SOUS_TACHES = 5
 MAX_PROFONDEUR = 2
-TYPES_EFFORT = Literal["physique", "mental", "psychologique"]
+TYPES_EFFORT = Literal["physique", "mental"]
 
 
 class TacheCreate(BaseModel):
