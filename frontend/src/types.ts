@@ -2,7 +2,7 @@ export interface Tache {
   id: number;
   titre: string;
   description: string | null;
-  categorie: "physique" | "mental" | null;
+  categorie: "physique" | "mental" | "paresseux" | null;
   date_limite: string | null;  // ISO 8601 datetime string
   terminee: boolean;
   profondeur: number;

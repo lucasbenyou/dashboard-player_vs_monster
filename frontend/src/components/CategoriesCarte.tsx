@@ -1,6 +1,6 @@
 import type { Categorie } from "../types";
 
-const LABELS: Record<string, string> = { physique: "Physique", mental: "Mental" };
+const LABELS: Record<string, string> = { physique: "Voie du Corps", mental: "Voie de l'Esprit", paresseux: "Voie du Paresseux" };
 
 interface Props {
   categories: Categorie[];

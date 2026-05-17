@@ -3,16 +3,18 @@ from sqlalchemy.orm import Session
 from models import CategorieModel, CompetenceModel
 from services.niveaux import SEUILS, MAX_NIVEAU, niveau_actuel
 
-TYPES = ["physique", "mental"]
+TYPES = ["physique", "mental", "paresseux"]
 
 BONUS_SPECIFIQUE = {
-    "physique": {"force": 2, "vie": 2},
-    "mental":   {"intel": 2, "magie": 2},
+    "physique":  {"force": 2,   "vie": 2},
+    "mental":    {"intel": 2,   "magie": 2},
+    "paresseux": {"defense": 2, "magie": 2},
 }
 
 ICONES = {
-    "physique": "💪",
-    "mental":   "🧠",
+    "physique":  "💪",
+    "mental":    "🧠",
+    "paresseux": "😴",
 }
 
 

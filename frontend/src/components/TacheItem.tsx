@@ -2,7 +2,7 @@ import { useState } from "react";
 import type { Tache } from "../types";
 import Countdown from "./Countdown";
 
-const CAT_ICONE: Record<string, string> = { physique: "💪", mental: "🧠" };
+const CAT_ICONE: Record<string, string> = { physique: "💪", mental: "🧠", paresseux: "😴" };
 
 interface Props {
   tache: Tache;
@@ -16,8 +16,10 @@ export default function TacheItem({ tache, onTerminer, onSupprimer, onAjouterSou
   const [titreForm, setTitreForm] = useState("");
   const [descForm, setDescForm] = useState("");
 
-  const estFeuille = tache.sous_taches.length === 0 && tache.terminee !== undefined;
-  const peutAjouterSous = tache.profondeur < 2 && tache.sous_taches.length < 5;
+  const estFeuille      = tache.sous_taches.length === 0;
+  const pct             = tache.progression ?? 0;
+  const estTerminee     = estFeuille ? tache.terminee : pct >= 100;
+  const peutAjouterSous = tache.profondeur < 2 && tache.sous_taches.length < 5 && !estTerminee;
 
   function handleAjouterSous() {
     if (!titreForm.trim()) return;
@@ -27,13 +29,11 @@ export default function TacheItem({ tache, onTerminer, onSupprimer, onAjouterSou
     setFormVisible(false);
   }
 
-  const pct = tache.progression ?? 0;
-
   return (
-    <div className={`tache niveau-${tache.profondeur}${tache.terminee ? " terminee" : ""}`}>
+    <div className={`tache niveau-${tache.profondeur}${estTerminee ? " terminee" : ""}`}>
       <div className="tache-entete">
         <div>
-          <span className={`tache-titre${tache.terminee ? " barre" : ""}`}>{tache.titre}</span>
+          <span className={`tache-titre${estTerminee ? " barre" : ""}`}>{tache.titre}</span>
           <span className="niveau-badge">niv. {tache.profondeur}</span>
           {tache.categorie && (
             <span className={`badge-cat ${tache.categorie}`}>
@@ -41,22 +41,22 @@ export default function TacheItem({ tache, onTerminer, onSupprimer, onAjouterSou
             </span>
           )}
           {tache.date_limite && (
-            <Countdown dateLimite={tache.date_limite} terminee={tache.terminee} />
+            <Countdown dateLimite={tache.date_limite} terminee={estTerminee} />
           )}
           {tache.description && <div className="tache-desc">{tache.description}</div>}
         </div>
         <div className="tache-actions">
-          {estFeuille && !tache.terminee && (
+          {estFeuille && !estTerminee && (
             <button className="btn btn-success btn-inline" onClick={() => onTerminer(tache.id)}>
               ✓ Terminer
             </button>
           )}
-          {peutAjouterSous && !tache.terminee && (
+          {peutAjouterSous && (
             <button className="btn btn-ghost btn-inline" onClick={() => setFormVisible(v => !v)}>
               + sous-tâche
             </button>
           )}
-          {!tache.terminee && (
+          {!estTerminee && (
             <button className="btn btn-danger btn-inline" onClick={() => onSupprimer(tache.id)}>
               ✕
             </button>
@@ -64,7 +64,7 @@ export default function TacheItem({ tache, onTerminer, onSupprimer, onAjouterSou
         </div>
       </div>
 
-      {!estFeuille && (
+      {!estFeuille && !estTerminee && (
         <div className="progression-wrapper">
           <div className="progression-label">Progression : {pct} %</div>
           <div className="progression-piste">
@@ -99,13 +99,8 @@ export default function TacheItem({ tache, onTerminer, onSupprimer, onAjouterSou
       {tache.sous_taches.length > 0 && (
         <div className="sous-taches">
           {tache.sous_taches.map(st => (
-            <TacheItem
-              key={st.id}
-              tache={st}
-              onTerminer={onTerminer}
-              onSupprimer={onSupprimer}
-              onAjouterSous={onAjouterSous}
-            />
+            <TacheItem key={st.id} tache={st}
+              onTerminer={onTerminer} onSupprimer={onSupprimer} onAjouterSous={onAjouterSous} />
           ))}
         </div>
       )}

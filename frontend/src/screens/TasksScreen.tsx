@@ -25,7 +25,7 @@ export default function TasksScreen({ nom, onDeconnexion }: Props) {
   const [formulaireVisible, setFormulaireVisible] = useState(false);
   const [titre, setTitre]             = useState("");
   const [description, setDescription] = useState("");
-  const [categorie, setCategorie]     = useState("");
+  const [categorie, setCategorie]     = useState("physique");
   const [typeLimite, setTypeLimite]   = useState<TypeLimite>("aucune");
   const [dureeH, setDureeH]           = useState("0");
   const [dureeMin, setDureeMin]       = useState("30");
@@ -60,14 +60,14 @@ export default function TasksScreen({ nom, onDeconnexion }: Props) {
   }
 
   function resetFormulaire() {
-    setTitre(""); setDescription(""); setCategorie("");
+    setTitre(""); setDescription(""); setCategorie("physique");
     setTypeLimite("aucune"); setDureeH("0"); setDureeMin("30"); setDateChoisie("");
   }
 
   async function handleAjouter() {
     if (!titre.trim()) { setErreur("Le titre est obligatoire."); return; }
     try {
-      await creerTache(titre.trim(), description.trim() || null, categorie || null, calculerDateLimite());
+      await creerTache(titre.trim(), description.trim() || null, categorie, calculerDateLimite());
       resetFormulaire();
       setFormulaireVisible(false);
       setErreur("");
@@ -160,9 +160,9 @@ export default function TasksScreen({ nom, onDeconnexion }: Props) {
               value={categorie}
               onChange={e => setCategorie(e.target.value)}
             >
-              <option value="">— Sans voie —</option>
               <option value="physique">💪 Voie du Corps</option>
               <option value="mental">🧠 Voie de l'Esprit</option>
+              <option value="paresseux">😴 Voie du Paresseux</option>
             </select>
 
             {/* ── Limite de temps ── */}
@@ -226,19 +226,35 @@ export default function TasksScreen({ nom, onDeconnexion }: Props) {
 
         {erreur && <div className="erreur-taches">{erreur}</div>}
 
-        {taches.length === 0 ? (
-          <div className="vide">Aucune quête en cours — partez à l'aventure !</div>
-        ) : (
-          taches.map(t => (
-            <TacheItem
-              key={t.id}
-              tache={t}
-              onTerminer={handleTerminer}
-              onSupprimer={handleSupprimer}
-              onAjouterSous={handleAjouterSous}
-            />
-          ))
-        )}
+        {(() => {
+          const estTerminee = (t: Tache) =>
+            t.sous_taches.length === 0 ? t.terminee : (t.progression ?? 0) >= 100;
+          const enCours   = taches.filter(t => !estTerminee(t));
+          const terminees = taches.filter(t => estTerminee(t)).slice(-3);
+
+          if (taches.length === 0) {
+            return <div className="vide">Aucune quête en cours — partez à l'aventure !</div>;
+          }
+          return (
+            <>
+              {enCours.map(t => (
+                <TacheItem key={t.id} tache={t}
+                  onTerminer={handleTerminer} onSupprimer={handleSupprimer} onAjouterSous={handleAjouterSous} />
+              ))}
+              {terminees.length > 0 && (
+                <>
+                  <div style={{ fontSize: 15, fontFamily: "'Cinzel',serif", color: "var(--texte-doux)", opacity: 0.6, margin: "20px 0 10px", letterSpacing: "0.1em", textTransform: "uppercase" }}>
+                    ✦ Quêtes accomplies
+                  </div>
+                  {terminees.map(t => (
+                    <TacheItem key={t.id} tache={t}
+                      onTerminer={handleTerminer} onSupprimer={handleSupprimer} onAjouterSous={handleAjouterSous} />
+                  ))}
+                </>
+              )}
+            </>
+          );
+        })()}
 
       </div>
     </div>
