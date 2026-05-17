@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from models import CategorieModel, CompetenceModel
 from services.niveaux import SEUILS, MAX_NIVEAU, niveau_actuel
 
-TYPES = ["physique", "mental", "paresseux"]
+TYPES = ["physique", "paresseux", "mental"]
 
 BONUS_SPECIFIQUE = {
     "physique":  {"force": 2,   "vie": 2},
@@ -24,7 +24,8 @@ def creer_pour_utilisateur(user_id: int, db: Session) -> None:
     db.commit()
 
 
-def completer_tache(user_id: int, type_effort: str, db: Session) -> None:
+def completer_tache(user_id: int, type_effort: str, db: Session, comp: CompetenceModel | None = None) -> None:
+    """Met à jour la progression de la voie. Ne commit PAS — c'est l'appelant qui commit."""
     if type_effort not in TYPES:
         return
     prog = db.query(CategorieModel).filter(
@@ -39,13 +40,13 @@ def completer_tache(user_id: int, type_effort: str, db: Session) -> None:
     nouveau_niveau = niveau_actuel(prog.taches_completees)
 
     if nouveau_niveau > ancien_niveau:
-        comp = db.query(CompetenceModel).filter(CompetenceModel.user_id == user_id).first()
+        # Réutilise l'objet comp déjà chargé pour éviter tout conflit de session
+        if comp is None:
+            comp = db.query(CompetenceModel).filter(CompetenceModel.user_id == user_id).first()
         if comp:
             niveaux = nouveau_niveau - ancien_niveau
             for stat, val in BONUS_SPECIFIQUE[type_effort].items():
                 setattr(comp, stat, getattr(comp, stat) + val * niveaux)
-
-    db.commit()
 
 
 def _progression_niveau(taches_completees: int) -> dict:

@@ -15,7 +15,8 @@
       "Bash(python -m pip install fastapi uvicorn sqlalchemy python-jose bcrypt httpx)",
       "Bash(curl -s http://localhost:5173)",
       "PowerShell(Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force)",
-      "PowerShell(Stop-Process -Force -ErrorAction SilentlyContinue)"
+      "PowerShell(Stop-Process -Force -ErrorAction SilentlyContinue)",
+      "Bash(git commit -m ' *)"
     ]
   }
 }

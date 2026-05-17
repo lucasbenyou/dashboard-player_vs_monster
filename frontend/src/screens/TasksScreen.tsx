@@ -8,8 +8,11 @@ import NiveauCarte from "../components/NiveauCarte";
 import CategoriesCarte from "../components/CategoriesCarte";
 import CompetencesCarte from "../components/CompetencesCarte";
 import TacheItem from "../components/TacheItem";
+import QuestesTerminees from "../components/QuestesTerminees";
+import { IconDuree, IconCalendrier } from "../components/Icons";
 
 type TypeLimite = "aucune" | "duree" | "date";
+type Onglet = "cours" | "terminees";
 
 interface Props {
   nom: string;
@@ -22,6 +25,7 @@ export default function TasksScreen({ nom, onDeconnexion }: Props) {
   const [competences, setCompetences] = useState<Competences | null>(null);
   const [taches, setTaches]           = useState<Tache[]>([]);
 
+  const [onglet, setOnglet]           = useState<Onglet>("cours");
   const [formulaireVisible, setFormulaireVisible] = useState(false);
   const [titre, setTitre]             = useState("");
   const [description, setDescription] = useState("");
@@ -113,7 +117,6 @@ export default function TasksScreen({ nom, onDeconnexion }: Props) {
     }
   }
 
-  // Date min pour le date picker (aujourd'hui)
   const today = new Date().toISOString().slice(0, 10);
 
   return (
@@ -128,7 +131,10 @@ export default function TasksScreen({ nom, onDeconnexion }: Props) {
           <div style={{ display: "flex", gap: 8 }}>
             <button
               className="btn btn-primary btn-inline"
-              onClick={() => setFormulaireVisible(v => !v)}
+              onClick={() => {
+                setOnglet("cours");
+                setFormulaireVisible(v => !v);
+              }}
             >
               + Nouvelle quête
             </button>
@@ -160,12 +166,11 @@ export default function TasksScreen({ nom, onDeconnexion }: Props) {
               value={categorie}
               onChange={e => setCategorie(e.target.value)}
             >
-              <option value="physique">💪 Voie du Corps</option>
-              <option value="mental">🧠 Voie de l'Esprit</option>
-              <option value="paresseux">😴 Voie du Paresseux</option>
+              <option value="physique">⚔ Voie du Corps</option>
+              <option value="mental">✦ Voie de l'Esprit</option>
+              <option value="paresseux">☽ Voie du Paresseux</option>
             </select>
 
-            {/* ── Limite de temps ── */}
             <div style={{ marginBottom: 10 }}>
               <div style={{ display: "flex", gap: 6, marginBottom: 8 }}>
                 {(["aucune", "duree", "date"] as TypeLimite[]).map(t => (
@@ -176,8 +181,8 @@ export default function TasksScreen({ nom, onDeconnexion }: Props) {
                     className={`btn btn-inline ${typeLimite === t ? "btn-primary" : "btn-ghost"}`}
                   >
                     {t === "aucune" && "Sans limite"}
-                    {t === "duree"  && "⏱ Durée"}
-                    {t === "date"   && "📅 Date limite"}
+                    {t === "duree"  && <span style={{display:"flex",alignItems:"center",gap:5}}><IconDuree size={14}/>Durée</span>}
+                    {t === "date"   && <span style={{display:"flex",alignItems:"center",gap:5}}><IconCalendrier size={14}/>Date limite</span>}
                   </button>
                 ))}
               </div>
@@ -185,25 +190,21 @@ export default function TasksScreen({ nom, onDeconnexion }: Props) {
               {typeLimite === "duree" && (
                 <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
                   <input
-                    type="number"
-                    min="0"
-                    max="99"
+                    type="number" min="0" max="99"
                     value={dureeH}
                     onChange={e => setDureeH(e.target.value)}
                     style={{ width: 70 }}
                     placeholder="0"
                   />
-                  <span style={{ fontFamily: "'Crimson Text', serif", color: "var(--encre-douce)" }}>h</span>
+                  <span style={{ fontFamily: "'Crimson Text', serif", color: "var(--texte-doux)" }}>h</span>
                   <input
-                    type="number"
-                    min="0"
-                    max="59"
+                    type="number" min="0" max="59"
                     value={dureeMin}
                     onChange={e => setDureeMin(e.target.value)}
                     style={{ width: 70 }}
                     placeholder="30"
                   />
-                  <span style={{ fontFamily: "'Crimson Text', serif", color: "var(--encre-douce)" }}>min</span>
+                  <span style={{ fontFamily: "'Crimson Text', serif", color: "var(--texte-doux)" }}>min</span>
                 </div>
               )}
 
@@ -224,16 +225,52 @@ export default function TasksScreen({ nom, onDeconnexion }: Props) {
           </div>
         )}
 
+        {/* ── Onglets ── */}
+        <div style={{
+          display: "flex",
+          gap: 6,
+          background: "rgba(0,0,0,0.25)",
+          borderRadius: 12,
+          padding: 5,
+          marginBottom: 20,
+        }}>
+          {([
+            { id: "cours",     label: "⚔ En cours"   },
+            { id: "terminees", label: "✦ Accomplies"  },
+          ] as { id: Onglet; label: string }[]).map(o => (
+            <button
+              key={o.id}
+              onClick={() => { setOnglet(o.id); setFormulaireVisible(false); }}
+              style={{
+                flex: 1,
+                padding: "10px 16px",
+                borderRadius: 9,
+                border: "none",
+                cursor: "pointer",
+                fontFamily: "'Cinzel', serif",
+                fontSize: 12,
+                fontWeight: 700,
+                letterSpacing: "0.07em",
+                transition: "all 0.2s",
+                background: onglet === o.id ? "rgba(155,93,229,0.25)" : "none",
+                color: onglet === o.id ? "var(--violet-clair)" : "var(--texte-doux)",
+                boxShadow: onglet === o.id ? "0 0 16px rgba(155,93,229,0.2)" : "none",
+              }}
+            >
+              {o.label}
+            </button>
+          ))}
+        </div>
+
         {erreur && <div className="erreur-taches">{erreur}</div>}
 
-        {(() => {
+        {onglet === "cours" ? (() => {
           const estTerminee = (t: Tache) =>
             t.sous_taches.length === 0 ? t.terminee : (t.progression ?? 0) >= 100;
-          const enCours   = taches.filter(t => !estTerminee(t));
-          const terminees = taches.filter(t => estTerminee(t)).slice(-3);
+          const enCours = taches.filter(t => !estTerminee(t));
 
-          if (taches.length === 0) {
-            return <div className="vide">Aucune quête en cours — partez à l'aventure !</div>;
+          if (enCours.length === 0) {
+            return <div className="vide">Toutes les quêtes sont accomplies !</div>;
           }
           return (
             <>
@@ -241,20 +278,11 @@ export default function TasksScreen({ nom, onDeconnexion }: Props) {
                 <TacheItem key={t.id} tache={t}
                   onTerminer={handleTerminer} onSupprimer={handleSupprimer} onAjouterSous={handleAjouterSous} />
               ))}
-              {terminees.length > 0 && (
-                <>
-                  <div style={{ fontSize: 15, fontFamily: "'Cinzel',serif", color: "var(--texte-doux)", opacity: 0.6, margin: "20px 0 10px", letterSpacing: "0.1em", textTransform: "uppercase" }}>
-                    ✦ Quêtes accomplies
-                  </div>
-                  {terminees.map(t => (
-                    <TacheItem key={t.id} tache={t}
-                      onTerminer={handleTerminer} onSupprimer={handleSupprimer} onAjouterSous={handleAjouterSous} />
-                  ))}
-                </>
-              )}
             </>
           );
-        })()}
+        })() : (
+          <QuestesTerminees taches={taches} />
+        )}
 
       </div>
     </div>

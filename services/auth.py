@@ -1,10 +1,11 @@
 import bcrypt
+import re
 from datetime import datetime, timedelta, timezone
 
 from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 from sqlalchemy.orm import Session
 
 from models import UserModel
@@ -19,8 +20,21 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="connexion")
 
 
 class InscriptionData(BaseModel):
-    nom: str = Field(min_length=3)
-    mot_de_passe: str = Field(min_length=6)
+    nom: str = Field(min_length=6)
+    mot_de_passe: str = Field(min_length=8)
+
+    @field_validator("mot_de_passe")
+    @classmethod
+    def valider_complexite(cls, v: str) -> str:
+        if not re.search(r"[a-z]", v):
+            raise ValueError("Le mot de passe doit contenir au moins une minuscule (a-z)")
+        if not re.search(r"[A-Z]", v):
+            raise ValueError("Le mot de passe doit contenir au moins une majuscule (A-Z)")
+        if not re.search(r"[0-9]", v):
+            raise ValueError("Le mot de passe doit contenir au moins un chiffre (0-9)")
+        if not re.search(r"[!@#$%^&*()\-_=+\[\]{};:'\",.<>?/\\|~`]", v):
+            raise ValueError("Le mot de passe doit contenir au moins un caractère spécial (!@#$%^&*...)")
+        return v
 
 
 class ConnexionData(BaseModel):

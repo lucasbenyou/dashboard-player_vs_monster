@@ -21,7 +21,7 @@
 
 body {
   font-family: 'Crimson Text', Georgia, serif;
-  font-size: 31px;
+  font-size: 25px;
   color: var(--texte);
   min-height: 100vh;
 
@@ -87,7 +87,7 @@ h1, h2, h3,
 }
 
 .auth-carte h2 {
-  font-size: 47px;
+  font-size: 38px;
   color: var(--or);
   text-align: center;
   margin-bottom: 4px;
@@ -98,7 +98,7 @@ h1, h2, h3,
   text-align: center;
   font-style: italic;
   color: var(--texte-doux);
-  font-size: 25px;
+  font-size: 20px;
   margin-bottom: 28px;
 }
 
@@ -116,7 +116,7 @@ h1, h2, h3,
   padding: 9px;
   text-align: center;
   cursor: pointer;
-  font-size: 22px;
+  font-size: 18px;
   letter-spacing: 0.08em;
   color: var(--texte-doux);
   border: none;
@@ -136,7 +136,7 @@ h1, h2, h3,
 .auth-champ label {
   display: block;
   font-family: 'Cinzel', serif;
-  font-size: 24px;
+  font-size: 19px;
   font-weight: 600;
   color: var(--texte-doux);
   margin-bottom: 7px;
@@ -149,7 +149,7 @@ h1, h2, h3,
   padding: 12px 16px;
   border: 1px solid var(--bord);
   border-radius: 10px;
-  font-size: 29px;
+  font-size: 23px;
   font-family: 'Crimson Text', serif;
   background: rgba(255,255,255,0.05);
   color: var(--texte);
@@ -166,7 +166,7 @@ h1, h2, h3,
 .auth-erreur {
   color: #f87171;
   font-style: italic;
-  font-size: 25px;
+  font-size: 20px;
   margin-bottom: 16px;
   min-height: 18px;
   text-align: center;
@@ -187,7 +187,7 @@ h1, h2, h3,
 .entete-gauche { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
 
 h1 {
-  font-size: 50px;
+  font-size: 40px;
   background: linear-gradient(90deg, var(--or), var(--violet-clair));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -196,7 +196,7 @@ h1 {
 }
 
 .utilisateur-badge {
-  font-size: 24px;
+  font-size: 19px;
   letter-spacing: 0.08em;
   color: var(--texte-doux);
   background: rgba(255,255,255,0.05);
@@ -229,7 +229,7 @@ h1 {
 .niveau-badge-grand {
   background: linear-gradient(135deg, var(--or-sombre), var(--or));
   color: #1a0e00;
-  font-size: 24px;
+  font-size: 19px;
   font-weight: 700;
   padding: 8px 18px;
   border-radius: 100px;
@@ -242,7 +242,7 @@ h1 {
 .niveau-barre-wrapper { flex: 1; }
 
 .niveau-barre-label {
-  font-size: 24px;
+  font-size: 19px;
   font-style: italic;
   color: var(--texte-doux);
   margin-bottom: 8px;
@@ -273,7 +273,7 @@ h1 {
 /* â”€â”€ CatÃ©gories â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .cat-titre,
 .comp-titre {
-  font-size: 24px;
+  font-size: 19px;
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -286,6 +286,12 @@ h1 {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 12px;
+}
+
+.cat-item:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+  max-width: calc(50% - 6px);
+  margin: 0 auto;
 }
 
 .cat-item {
@@ -304,9 +310,9 @@ h1 {
   margin-bottom: 10px;
 }
 
-.cat-icone { font-size: 32px; }
+.cat-icone { font-size: 26px; }
 .cat-nom {
-  font-size: 24px;
+  font-size: 19px;
   font-weight: 600;
   color: var(--texte);
   letter-spacing: 0.06em;
@@ -314,7 +320,7 @@ h1 {
 
 .cat-niveau-badge {
   margin-left: auto;
-  font-size: 18px;
+  font-size: 14px;
   font-weight: 700;
   background: rgba(240,192,64,0.15);
   color: var(--or);
@@ -335,12 +341,12 @@ h1 {
 .cat-fill.physique { background: linear-gradient(90deg, #7f1d1d, #ef4444); box-shadow: 0 0 6px rgba(239,68,68,0.4); }
 .cat-fill.mental   { background: linear-gradient(90deg, #4c1d95, #9b5de5); box-shadow: 0 0 6px rgba(155,93,229,0.4); }
 
-.cat-sous-label { font-style: italic; font-size: 22px; color: var(--texte-doux); }
+.cat-sous-label { font-style: italic; font-size: 18px; color: var(--texte-doux); }
 
 .badge-cat {
   display: inline-flex;
   align-items: center;
-  font-size: 18px;
+  font-size: 14px;
   font-weight: 700;
   padding: 2px 8px;
   border-radius: 100px;
@@ -356,7 +362,7 @@ h1 {
   padding: 12px 16px;
   border: 1px solid var(--bord);
   border-radius: 10px;
-  font-size: 28px;
+  font-size: 22px;
   font-family: 'Cinzel', serif;
   background: rgba(255,255,255,0.05);
   color: var(--texte);
@@ -376,7 +382,7 @@ h1 {
 }
 
 .points-badge {
-  font-size: 18px;
+  font-size: 14px;
   font-weight: 700;
   background: rgba(240,192,64,0.15);
   color: var(--or);
@@ -413,9 +419,9 @@ h1 {
   border-color: var(--bord);
 }
 
-.stat-icone { font-size: 40px; }
-.stat-nom   { font-size: 17px; color: var(--texte-doux); letter-spacing: 0.1em; text-transform: uppercase; }
-.stat-val   { font-size: 40px; font-weight: 700; color: var(--or); text-shadow: 0 0 12px rgba(240,192,64,0.4); }
+.stat-icone { font-size: 32px; }
+.stat-nom   { font-size: 14px; color: var(--texte-doux); letter-spacing: 0.1em; text-transform: uppercase; }
+.stat-val   { font-size: 32px; font-weight: 700; color: var(--or); text-shadow: 0 0 12px rgba(240,192,64,0.4); }
 
 .stat-barre-bg {
   width: 100%;
@@ -440,7 +446,7 @@ h1 {
   border: 1px solid rgba(240,192,64,0.4);
   background: rgba(240,192,64,0.15);
   color: var(--or);
-  font-size: 29px;
+  font-size: 23px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -456,7 +462,7 @@ h1 {
 /* â”€â”€ Boutons â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .btn {
   padding: 10px 20px;
-  font-size: 24px;
+  font-size: 19px;
   font-family: 'Cinzel', serif;
   font-weight: 600;
   border: none;
@@ -465,7 +471,7 @@ h1 {
   letter-spacing: 0.08em;
   transition: opacity 0.15s, transform 0.1s, box-shadow 0.2s;
 }
-.btn-inline { padding: 6px 12px; font-size: 18px; border-radius: 8px; }
+.btn-inline { padding: 6px 12px; font-size: 14px; border-radius: 8px; }
 .btn:active { transform: scale(0.96); }
 
 .btn-primary {
@@ -504,7 +510,7 @@ h1 {
   border: 1px solid var(--bord);
   color: var(--texte-doux);
   padding: 8px 16px;
-  font-size: 18px;
+  font-size: 14px;
   font-family: 'Cinzel', serif;
   letter-spacing: 0.08em;
   border-radius: 10px;
@@ -531,7 +537,7 @@ h1 {
   padding: 12px 16px;
   border: 1px solid var(--bord);
   border-radius: 10px;
-  font-size: 29px;
+  font-size: 23px;
   margin-bottom: 12px;
   font-family: 'Crimson Text', serif;
   background: rgba(255,255,255,0.04);
@@ -572,18 +578,18 @@ h1 {
 }
 
 .tache-titre {
-  font-size: 28px;
+  font-size: 22px;
   font-weight: 600;
   color: var(--texte);
   letter-spacing: 0.02em;
 }
 .tache-titre.barre { text-decoration: line-through; color: var(--texte-doux); }
-.tache-desc { font-style: italic; font-size: 25px; color: var(--texte-doux); margin-top: 5px; }
-.niveau-badge { font-size: 18px; color: rgba(255,255,255,0.2); margin-left: 8px; font-style: italic; }
+.tache-desc { font-style: italic; font-size: 20px; color: var(--texte-doux); margin-top: 5px; }
+.niveau-badge { font-size: 14px; color: rgba(255,255,255,0.2); margin-left: 8px; font-style: italic; }
 .tache-actions { display: flex; gap: 6px; flex-shrink: 0; align-items: center; flex-wrap: wrap; }
 
 .progression-wrapper { margin-top: 12px; }
-.progression-label { font-style: italic; font-size: 24px; color: var(--texte-doux); margin-bottom: 6px; }
+.progression-label { font-style: italic; font-size: 19px; color: var(--texte-doux); margin-bottom: 6px; }
 .progression-piste {
   background: rgba(255,255,255,0.07);
   border-radius: 100px;
@@ -614,7 +620,7 @@ h1 {
   padding: 10px 14px;
   border: 1px solid var(--bord);
   border-radius: 8px;
-  font-size: 25px;
+  font-size: 20px;
   margin-bottom: 10px;
   font-family: 'Crimson Text', serif;
   background: rgba(255,255,255,0.04);
@@ -626,16 +632,17 @@ h1 {
 
 .sous-taches { margin-top: 12px; }
 
-.erreur-taches { color: #f87171; font-style: italic; font-size: 25px; margin-bottom: 12px; min-height: 18px; }
+.erreur-taches { color: #f87171; font-style: italic; font-size: 20px; margin-bottom: 12px; min-height: 18px; }
 
 .vide {
   text-align: center;
   color: var(--texte-doux);
   font-style: italic;
-  font-size: 31px;
+  font-size: 25px;
   padding: 60px 0;
   opacity: 0.6;
 }
+
 
 
 

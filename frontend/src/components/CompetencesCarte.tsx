@@ -1,11 +1,12 @@
 import type { Competences, StatKey } from "../types";
+import { IconForce, IconDefense, IconVie, IconMagie, IconIntel } from "./Icons";
 
-const STATS: { key: StatKey; label: string; icone: string }[] = [
-  { key: "force",   label: "Force",   icone: "⚔" },
-  { key: "defense", label: "Défense", icone: "🛡" },
-  { key: "vie",     label: "Vie",     icone: "❤" },
-  { key: "magie",   label: "Magie",   icone: "✨" },
-  { key: "intel",   label: "Intel",   icone: "🧠" },
+const STATS: { key: StatKey; label: string; icone: React.ReactNode }[] = [
+  { key: "force",   label: "Force",   icone: <IconForce /> },
+  { key: "defense", label: "Défense", icone: <IconDefense /> },
+  { key: "vie",     label: "Vie",     icone: <IconVie /> },
+  { key: "magie",   label: "Magie",   icone: <IconMagie /> },
+  { key: "intel",   label: "Intel",   icone: <IconIntel /> },
 ];
 
 interface Props {
@@ -15,7 +16,7 @@ interface Props {
 
 export default function CompetencesCarte({ competences, onAmeliorer }: Props) {
   const aDesPoints = competences.points_disponibles > 0;
-  const maxStat = Math.max(competences.force, competences.defense, competences.vie, competences.magie, competences.intel, 10);
+  const maxStat = Math.max(competences.force, competences.defense, competences.vie, competences.magie, competences.intel);
 
   return (
     <div className="comp-carte">

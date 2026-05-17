@@ -56,6 +56,7 @@ class TacheService:
 
     def ajouter(self, tache: TacheCreate, db: Session, user_id: int) -> dict:
         profondeur = 0
+        categorie  = tache.categorie
         if tache.parent_id is not None:
             parent = db.get(TacheModel, tache.parent_id)
             if not parent:
@@ -67,11 +68,14 @@ class TacheService:
             if len(parent.sous_taches) >= MAX_SOUS_TACHES:
                 raise ValueError(f"Maximum de {MAX_SOUS_TACHES} sous-tâches par tâche atteint")
             profondeur = parent.profondeur + 1
+            # Hériter la catégorie du parent si aucune n'est définie
+            if categorie is None:
+                categorie = parent.categorie
 
         nouvelle = TacheModel(
             titre=tache.titre,
             description=tache.description,
-            categorie=tache.categorie,
+            categorie=categorie,
             date_limite=tache.date_limite,
             profondeur=profondeur,
             parent_id=tache.parent_id,
@@ -95,20 +99,22 @@ class TacheService:
 
         t.terminee = True
 
+        # Charge comp une seule fois pour tout modifier sur le même objet
+        comp = db.query(CompetenceModel).filter(CompetenceModel.user_id == user_id).first()
+
         # Progression niveau global
         user = db.get(UserModel, user_id)
         ancien_niveau = niveau_actuel(user.taches_completees)
         user.taches_completees += 1
         nouveau_niveau = niveau_actuel(user.taches_completees)
-        if nouveau_niveau > ancien_niveau:
-            comp = db.query(CompetenceModel).filter(CompetenceModel.user_id == user_id).first()
-            if comp:
-                comp.points_disponibles += POINTS_PAR_NIVEAU * (nouveau_niveau - ancien_niveau)
+        if nouveau_niveau > ancien_niveau and comp:
+            comp.points_disponibles += POINTS_PAR_NIVEAU * (nouveau_niveau - ancien_niveau)
 
-        # Progression catégorie (applique les bonus de stats directement)
+        # Progression catégorie — passe comp pour éviter un rechargement et un commit prématuré
         if t.categorie:
-            cat_service.completer_tache(user_id, t.categorie, db)
+            cat_service.completer_tache(user_id, t.categorie, db, comp)
 
+        # Un seul commit final qui inclut toutes les modifications
         db.commit()
         db.refresh(t)
         return _vers_dict(t)
